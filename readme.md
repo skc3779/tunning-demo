@@ -18,6 +18,7 @@ JMH(Java Microbenchmark Harness)는 JDK를 오픈소스로 제공하는 OpenJDK�
 
 ### JMH 샘플
 
+
 ### jmh-gradle-plugin 소개
 [플러그인] : https://github.com/melix/jmh-gradle-plugin
 
@@ -38,7 +39,33 @@ buildscript {
 }
 ```
 
-2.dependencies 설정
+2.sourceSets 설정
+```
+    /* start sourceSets */
+    String hostname = InetAddress.getLocalHost().getHostName().toLowerCase();
+    if (hostname.endsWith('.local')) {
+        hostname = hostname.replace(".local", '')
+    }
+    sourceSets {
+        main.java.srcDirs = ['src/main/java']
+        jmh.java.srcDirs = ['src/jmh/java']
+        main.resources.srcDirs = ['src/main/resources', "src/main/resources-" + hostname]
+        jmh.resources.srcDirs = ['src/jmh/resources', "src/jmh/resources-" + hostname]
+    }
+
+    sourceSets.all {
+        set ->
+            set.allSource.srcDirs.each {
+                if (!it.exists()) {
+                    // println it
+                    it.mkdirs()
+                }
+            }
+    }
+    /* end sourceSets */
+```
+
+3.dependencies 설정
 
 ```
     dependencies {
@@ -52,10 +79,13 @@ buildscript {
     }
 ```
 
-3.jmh Task 설정
+4.jmh Task 설정
 
 jmh 설정을 task의 변수로 사용 할 수 있도록 되어 있다.
 참고로, 소스코드상에서 jmh option를 설정하기 위해 annotation 설정을 하여도 아래의 설정이 우선시 된다.
+jmh 아래 설정은 BenchmarkMode를 AverageTime으로 하고, 이터레이션 반복횟수(interations) 1회, 
+이터레이션별 수행시간을 1s, fork를 1회로 설정하여 성능측정함.
+
 
 ```
 jmh {
@@ -65,7 +95,7 @@ jmh {
     humanOutputFile = null
     resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt") // results file
     resultFormat = 'CSV' // Result format type (one of CSV, JSON, NONE, SCSV, TEXT)
-    benchmarkMode = 'avgt' // Benchmark mode. Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
+    benchmarkMode = 'avgt' // Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
     iterations = 1 // Number of measurement iterations to do.
     timeOnIteration = '1s' // Time to spend at each measurement iteration.
     batchSize = 1 // Batch size: number of benchmark method calls per operation. (some benchmark modes can ignore this setting)
@@ -90,7 +120,7 @@ jmh {
 
 ```
 
-4.gradle 사용법
+5.gradle 사용법
 
 ```
 #> gradle clean jmh
