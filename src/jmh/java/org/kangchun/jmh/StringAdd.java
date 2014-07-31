@@ -5,6 +5,7 @@ import org.openjdk.jmh.annotations.*;
 /**
  * Created by kangchun on 2014-07-30.
  */
+
 @State(Scope.Thread)
 //@BenchmarkMode({Mode.AverageTime})
 public class StringAdd {
