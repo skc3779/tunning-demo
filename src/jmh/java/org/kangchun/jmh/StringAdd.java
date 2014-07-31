@@ -8,7 +8,6 @@ import org.openjdk.jmh.annotations.*;
 @State(Scope.Thread)
 //@BenchmarkMode({Mode.AverageTime})
 public class StringAdd {
-
     final String aValue = "abcde";
     String a;
     StringBuffer b;

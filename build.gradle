@@ -115,10 +115,13 @@ configure(allprojects) {
  */
 
 jmh {
-    include = 'org.kangchun.jmh.SetAdd.*'
+
+    include = 'org.kangchun.jmh.SetContains.*'
+
     humanOutputFile = null
-    resultsFile = null
-    benchmarkMode = 'all' // Benchmark mode. Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt") // results file
+    resultFormat = 'CSV' // Result format type (one of CSV, JSON, NONE, SCSV, TEXT)
+    benchmarkMode = 'avgt' // Benchmark mode. Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
     iterations = 1 // Number of measurement iterations to do.
     timeOnIteration = '1s' // Time to spend at each measurement iteration.
     batchSize = 1 // Batch size: number of benchmark method calls per operation. (some benchmark modes can ignore this setting)
@@ -130,7 +133,6 @@ jmh {
     warmupForks = 1 // How many warmup forks to make for a single benchmark. 0 to disable warmup forks.
 
 /*
-
     humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt") // human-readable output file
     resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt") // results file
     resultFormat = 'CSV' // Result format type (one of CSV, JSON, NONE, SCSV, TEXT)
