@@ -17,7 +17,11 @@ JMH(Java Microbenchmark Harness)는 JDK를 오픈소스로 제공하는 OpenJDK�
 ---
 
 ### JMH 샘플
-
+```
+src/jmh
+     |- java       : benchmarks를 위한 소스
+     |- resources  : benchmarks를 위한 리소스
+```
 
 ### jmh-gradle-plugin 소개
 [플러그인] : https://github.com/melix/jmh-gradle-plugin
